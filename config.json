@@ -1,0 +1,8 @@
+{
+    "market": {
+        "polymarket": {
+            "chainId": 137,
+            "clobApiUrl": "https://clob.polymarket.com"
+        }
+    }
+}

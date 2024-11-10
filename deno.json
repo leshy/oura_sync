@@ -1,9 +1,16 @@
 {
   "tasks": {
-    "dev": "deno run --watch main.ts"
+    "dev": "deno run --watch main.ts",
+    "test": "deno test --allow-run --parallel"
   },
   "imports": {
+    "@ethersproject/wallet": "npm:@ethersproject/wallet@^5.7.0",
     "@polymarket/clob-client": "npm:@polymarket/clob-client@^4.11.0",
-    "@std/assert": "jsr:@std/assert@1"
+    "@std/assert": "jsr:@std/assert@1",
+    "tslib": "npm:tslib@^2.8.1"
+  },
+
+  "fmt": {
+    "semiColons": false
   }
 }

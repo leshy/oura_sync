@@ -1,21 +1,20 @@
 import { join } from "https://deno.land/std@0.118.0/path/mod.ts";
 
+async function exec(cmd: string, ...args: string[]): Promise<string> {
+  const exec = new Deno.Command(cmd, { args: args });
+  const { code, stdout, stderr } = await exec.output();
+  return new TextDecoder().decode(stdout).trim();
+}
+
 interface Secret {
   username: string;
   password: string;
 }
 
 export async function getUsers(service: string): Promise<string[]> {
-  const command = new Deno.Command("pass", {
-    args: ["ls", service],
-  });
-  const { code, stdout, stderr } = await command.output();
-  return new TextDecoder()
-    .decode(stdout)
-    .trim()
+  return (await exec("pass", "ls", service))
     .split("\n")
     .slice(1)
-
     .map((line: string) => line.split(" ").pop()) as string[];
 }
 
@@ -23,11 +22,7 @@ export async function getSecret(
   service: string,
   user: string,
 ): Promise<string> {
-  const command = new Deno.Command("pass", {
-    args: [join(service, user)],
-  });
-  const { code, stdout, stderr } = await command.output();
-  return new TextDecoder().decode(stdout).trim();
+  return await exec("pass", join(service, user));
 }
 
 export async function getFirstSecret(service: string): Promise<Secret> {
