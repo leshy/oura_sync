@@ -4,5 +4,10 @@
             "chainId": 137,
             "clobApiUrl": "https://clob.polymarket.com"
         }
+    },
+
+    "influxdb": {
+        "host": "influxdb.mv",
+        "org": "org1"
     }
 }

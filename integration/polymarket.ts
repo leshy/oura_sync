@@ -16,7 +16,7 @@ export class Polymarket {
         this.config = config;
     }
 
-    async getWallet(): Promise<Wallet> {
+    private async getWallet(): Promise<Wallet> {
         if (!this.wallet) {
             const keys = await getFirstSecret("polymarket");
             const public_key = keys["username"];
@@ -30,7 +30,7 @@ export class Polymarket {
         return this.wallet;
     }
 
-    async getClient(): Promise<ClobClient> {
+    private async getClient(): Promise<ClobClient> {
         if (!this.client) {
             const wallet = await this.getWallet();
             const apiUrl = this.config["clobApiUrl"];
