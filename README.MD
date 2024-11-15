@@ -9,3 +9,8 @@ docker run \
  -e OURASYNC_INFLUXDB_BUCKET="bucket" \
  -it ourasync
 ```
+
+# Grafana
+![grafana dashboard](./misc/dashboard.png)
+
+my quick dashboard .json as example available in misc/ dir
