@@ -158,7 +158,6 @@
     "dependencies": [
       "jsr:@std/assert@1",
       "npm:@influxdata/influxdb-client@^1.35.0",
-      "npm:@polymarket/clob-client@^4.11.0",
       "npm:date-fns@^4.1.0"
     ]
   }

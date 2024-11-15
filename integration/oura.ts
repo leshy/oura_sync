@@ -10,15 +10,13 @@ function filterUndefined(obj: Record<string, any>): Record<string, any> {
 }
 
 type Config = {
-    baseURL: "https://api.ouraring.com/v2/";
+    baseURL: string;
+    token: string;
 };
 
 export class Oura {
     private config: Config;
-    constructor(
-        private token: string,
-        config: Partial<Config> = {},
-    ) {
+    constructor(config: Partial<Config>) {
         this.config = { baseURL: "https://api.ouraring.com/v2/", ...config };
     }
 
@@ -26,7 +24,7 @@ export class Oura {
         try {
             const headers = new Headers({
                 Accept: "application/json",
-                Authorization: "Bearer " + this.token,
+                Authorization: "Bearer " + this.config.token,
             });
 
             const fullUrl = new URL(join(this.config.baseURL, url));

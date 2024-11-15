@@ -1,0 +1,1624 @@
+{
+    "annotations": {
+        "list": [
+            {
+                "builtIn": 1,
+                "datasource": {
+                    "type": "grafana",
+                    "uid": "-- Grafana --"
+                },
+                "enable": true,
+                "hide": true,
+                "iconColor": "rgba(0, 211, 255, 1)",
+                "name": "Annotations & Alerts",
+                "type": "dashboard"
+            }
+        ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 1,
+    "id": 11,
+    "links": [],
+    "panels": [
+        {
+            "datasource": {
+                "type": "influxdb",
+                "uid": "I55amxwSz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 50
+                            },
+                            {
+                                "color": "light-orange",
+                                "value": 60
+                            },
+                            {
+                                "color": "blue",
+                                "value": 70
+                            },
+                            {
+                                "color": "green",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 2,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            },
+            "id": 5,
+            "options": {
+                "colorMode": "value",
+                "graphMode": "none",
+                "justifyMode": "center",
+                "orientation": "auto",
+                "percentChangeColorMode": "standard",
+                "reduceOptions": {
+                    "calcs": ["lastNotNull"],
+                    "fields": "",
+                    "values": false
+                },
+                "showPercentChange": false,
+                "textMode": "value_and_name",
+                "wideLayout": true
+            },
+            "pluginVersion": "11.1.0",
+            "targets": [
+                {
+                    "alias": "Readiness",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["$__interval"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "measurement": "readiness",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "refId": "A",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["score"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "last"
+                            }
+                        ]
+                    ],
+                    "tags": []
+                },
+                {
+                    "alias": "Resting Heart Rate",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["$__interval"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "sleep",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "refId": "B",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["lowest_heart_rate"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "last"
+                            }
+                        ]
+                    ],
+                    "tags": []
+                }
+            ],
+            "transparent": true,
+            "type": "stat"
+        },
+        {
+            "datasource": {
+                "type": "influxdb",
+                "uid": "I55amxwSz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "fixedColor": "red",
+                        "mode": "continuous-GrYlRd"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 25,
+                        "gradientMode": "opacity",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "stepBefore",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": 3600000,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "bpm"
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "heart.moving_average { source: workout }"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "super-light-red",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "heart.moving_average { source: awake }"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "red",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "heart.moving_average { source: rest }"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "dark-red",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "temperature_deviation"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.axisPlacement",
+                                "value": "right"
+                            },
+                            {
+                                "id": "custom.lineStyle"
+                            },
+                            {
+                                "id": "custom.spanNulls",
+                                "value": true
+                            },
+                            {
+                                "id": "unit",
+                                "value": "celsius"
+                            },
+                            {
+                                "id": "custom.lineInterpolation",
+                                "value": "stepBefore"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 24,
+                "x": 0,
+                "y": 2
+            },
+            "id": 1,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["$__interval"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["source::tag"],
+                            "type": "tag"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "measurement": "heart",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "refId": "A",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["value"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "median"
+                            },
+                            {
+                                "params": [20],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "source::tag",
+                            "operator": "!=",
+                            "value": "live"
+                        }
+                    ]
+                }
+            ],
+            "title": "Active Heart Rate",
+            "transparent": true,
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "influxdb",
+                "uid": "I55amxwSz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "fixedColor": "light-green",
+                        "mode": "fixed"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "opacity",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "stepBefore",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": true,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "celsius"
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "blood oxygen"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.axisPlacement",
+                                "value": "right"
+                            },
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "super-light-blue",
+                                    "mode": "fixed"
+                                }
+                            },
+                            {
+                                "id": "unit",
+                                "value": "percent"
+                            },
+                            {
+                                "id": "custom.lineInterpolation",
+                                "value": "smooth"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 24,
+                "x": 0,
+                "y": 11
+            },
+            "id": 6,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "targets": [
+                {
+                    "alias": "temperature_deviation",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["$__interval"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "readiness",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "refId": "B",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["temperature_deviation"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [5],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": []
+                },
+                {
+                    "alias": "blood oxygen",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["$__interval"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "spo2",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "refId": "A",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["spo2_percentage"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [20],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": []
+                }
+            ],
+            "title": "Body Temperature & Blood Oxygen Levels",
+            "transparent": true,
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "influxdb",
+                "uid": "I55amxwSz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 50,
+                        "gradientMode": "opacity",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "smooth",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "HRV"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
+                            },
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "light-blue",
+                                    "mode": "fixed"
+                                }
+                            },
+                            {
+                                "id": "custom.lineWidth",
+                                "value": 3
+                            },
+                            {
+                                "id": "custom.lineStyle",
+                                "value": {
+                                    "dash": [0, 10],
+                                    "fill": "dot"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "average_heart_rate"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "light-red",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "lowest_heart_rate"
+                        },
+                        "properties": [
+                            {
+                                "id": "color",
+                                "value": {
+                                    "fixedColor": "dark-red",
+                                    "mode": "fixed"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 24,
+                "x": 0,
+                "y": 19
+            },
+            "id": 2,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "11.1.0",
+            "targets": [
+                {
+                    "alias": "HRV",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "sleep",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "A",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["average_hrv"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [20],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": []
+                },
+                {
+                    "alias": "average_heart_rate",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "sleep",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "B",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["average_heart_rate"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "max"
+                            },
+                            {
+                                "params": [20],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": []
+                },
+                {
+                    "alias": "lowest_heart_rate",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "sleep",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "C",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["lowest_heart_rate"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [20],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "lowest_heart_rate::field",
+                            "operator": "<",
+                            "value": "150"
+                        }
+                    ]
+                },
+                {
+                    "alias": "total sleep",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": true,
+                    "measurement": "sleep",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "D",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["total_sleep_duration"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [5],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "lowest_heart_rate::field",
+                            "operator": "<",
+                            "value": "150"
+                        }
+                    ]
+                }
+            ],
+            "title": "Resting Heart Rate & HRV",
+            "transparent": true,
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "influxdb",
+                "uid": "I55amxwSz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": true,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 25,
+                        "gradientMode": "opacity",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "smooth",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "normal"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "dashed"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    "unit": "s"
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "total sleep"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.axisPlacement",
+                                "value": "right"
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
+                            },
+                            {
+                                "id": "custom.lineStyle",
+                                "value": {
+                                    "fill": "solid"
+                                }
+                            },
+                            {
+                                "id": "unit",
+                                "value": "s"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "TOTAL"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "group": "A",
+                                    "mode": "none"
+                                }
+                            },
+                            {
+                                "id": "custom.fillOpacity",
+                                "value": 0
+                            },
+                            {
+                                "id": "custom.lineStyle",
+                                "value": {
+                                    "dash": [0, 10],
+                                    "fill": "dot"
+                                }
+                            },
+                            {
+                                "id": "custom.lineWidth",
+                                "value": 3
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Latency"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.axisPlacement",
+                                "value": "right"
+                            },
+                            {
+                                "id": "custom.lineInterpolation",
+                                "value": "stepBefore"
+                            }
+                        ]
+                    },
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Awake"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.stacking",
+                                "value": {
+                                    "group": "A",
+                                    "mode": "none"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 24,
+                "x": 0,
+                "y": 28
+            },
+            "id": 3,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "11.1.0",
+            "targets": [
+                {
+                    "alias": "Deep",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["sleep_algorithm_version::tag"],
+                            "type": "tag"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "sleep",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT moving_average(mean(\"deep_sleep_duration\"), 20) FROM \"sleep\" WHERE (\"type\"::tag = 'long_sleep') AND $timeFilter GROUP BY time(24h), \"sleep_algorithm_version\"::tag fill(null)",
+                    "rawQuery": false,
+                    "refId": "D",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["deep_sleep_duration"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [5],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "type::tag",
+                            "operator": "=",
+                            "value": "long_sleep"
+                        }
+                    ]
+                },
+                {
+                    "alias": "Awake",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["sleep_algorithm_version::tag"],
+                            "type": "tag"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "sleep",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "A",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["awake_time"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [5],
+                                "type": "moving_average"
+                            },
+                            {
+                                "params": ["* -1"],
+                                "type": "math"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "type::tag",
+                            "operator": "=",
+                            "value": "long_sleep"
+                        }
+                    ]
+                },
+                {
+                    "alias": "Light",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["sleep_algorithm_version::tag"],
+                            "type": "tag"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "sleep",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "B",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["light_sleep_duration"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [5],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "type::tag",
+                            "operator": "=",
+                            "value": "long_sleep"
+                        }
+                    ]
+                },
+                {
+                    "alias": "REM",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["sleep_algorithm_version::tag"],
+                            "type": "tag"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "sleep",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "C",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["rem_sleep_duration"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [5],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "type::tag",
+                            "operator": "=",
+                            "value": "long_sleep"
+                        }
+                    ]
+                },
+                {
+                    "alias": "TOTAL",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["sleep_algorithm_version::tag"],
+                            "type": "tag"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "sleep",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "E",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["total_sleep_duration"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [5],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "type::tag",
+                            "operator": "=",
+                            "value": "long_sleep"
+                        }
+                    ]
+                },
+                {
+                    "alias": "Latency",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["sleep_algorithm_version::tag"],
+                            "type": "tag"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "sleep",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "F",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["latency"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [10],
+                                "type": "moving_average"
+                            },
+                            {
+                                "params": [" * -1"],
+                                "type": "math"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "type::tag",
+                            "operator": "=",
+                            "value": "long_sleep"
+                        }
+                    ]
+                }
+            ],
+            "title": "Sleep Phases",
+            "transparent": true,
+            "type": "timeseries"
+        },
+        {
+            "datasource": {
+                "type": "influxdb",
+                "uid": "I55amxwSz"
+            },
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisBorderShow": false,
+                        "axisCenteredZero": false,
+                        "axisColorMode": "text",
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 25,
+                        "gradientMode": "opacity",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "insertNulls": false,
+                        "lineInterpolation": "smooth",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    }
+                },
+                "overrides": [
+                    {
+                        "matcher": {
+                            "id": "byName",
+                            "options": "Readiness"
+                        },
+                        "properties": [
+                            {
+                                "id": "custom.axisPlacement",
+                                "value": "right"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "gridPos": {
+                "h": 9,
+                "w": 24,
+                "x": 0,
+                "y": 37
+            },
+            "id": 4,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom",
+                    "showLegend": true
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "11.1.0",
+            "targets": [
+                {
+                    "alias": "Stress",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "stress",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "A",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["stress_high"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [5],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": []
+                },
+                {
+                    "alias": "Recovery",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "stress",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "B",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["recovery_high"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [5],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": []
+                },
+                {
+                    "alias": "Readiness",
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "I55amxwSz"
+                    },
+                    "groupBy": [
+                        {
+                            "params": ["24h"],
+                            "type": "time"
+                        },
+                        {
+                            "params": ["null"],
+                            "type": "fill"
+                        }
+                    ],
+                    "hide": false,
+                    "measurement": "readiness",
+                    "orderByTime": "ASC",
+                    "policy": "default",
+                    "query": "SELECT mean(\"average_heart_rate\") FROM \"sleep\" WHERE $timeFilter GROUP BY time(24h)",
+                    "rawQuery": false,
+                    "refId": "C",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": ["score"],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            },
+                            {
+                                "params": [5],
+                                "type": "moving_average"
+                            }
+                        ]
+                    ],
+                    "tags": []
+                }
+            ],
+            "title": "Stress & Recovery",
+            "transparent": true,
+            "type": "timeseries"
+        }
+    ],
+    "refresh": "",
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+        "list": []
+    },
+    "time": {
+        "from": "now-3y",
+        "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Health",
+    "uid": "ce3oz5efkexa8d",
+    "version": 39,
+    "weekStart": ""
+}

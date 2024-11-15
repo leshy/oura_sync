@@ -6,18 +6,13 @@ import * as Influx from "./services/influxdb.ts";
 import * as ts from "./utils/timeseries/index.ts";
 
 export type Config = {
-    influx: influx.Config;
+    influxdb: influx.Config;
     oura: oura.Config;
 };
 
-async function sync() {
-    const oura = new Oura(await getSecret("oura", "token"));
-    const influx = new Influx.Influx({
-        url: "http://influxdb.mv:8086",
-        org: "org",
-        bucket: "self",
-        token: await getSecret("mv/influxdb/self", "token"),
-    });
+app("ourasync", async (config: Config) => {
+    const oura = new Oura(config.oura);
+    const influx = new Influx.Influx(config.influxdb);
 
     await influx.measurement("spo2").consume(
         oura.getDailySpo2,
@@ -111,15 +106,4 @@ async function sync() {
             };
         },
     );
-}
-
-// sync()
-//     .then(() => {
-//         Deno.exit(0);
-//     })
-//     .catch((error) => {
-//         console.error(error);
-//         Deno.exit(1);
-//     });
-
-app("ourasync", async function (config: Config) {});
+});
