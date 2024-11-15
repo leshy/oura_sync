@@ -13,7 +13,6 @@ async function measurement(name, fn) {
         measurement: name,
         token: influxToken,
     });
-
     await fn(influxMeasurement);
     await influxMeasurement.stop();
 }

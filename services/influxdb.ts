@@ -10,15 +10,56 @@ export interface InfluxDBConfig {
     measurement: string;
 }
 
-export type Point = {
+export type TSPoint = {
     time: Date;
     values: Record<string, number>;
     tags: Record<string, string | null>;
 };
 
-export class Influx<T extends Point>
-    implements TS.Store<T>, Service<InfluxDBConfig>
-{
+export class Measurement<T extends TSPoint> extends TS.Store<T> {
+    constructor(
+        private bucket: string,
+        private measurement: string,
+        private writeAPI,
+        private queryAPI,
+    ) {
+        super();
+    }
+
+    async writePoint(TSPoint: TS.Point<T>) {
+        const point = new InfluxClient.Point(this.measurement);
+
+        for (const [key, value] of Object.entries(TSPoint.tags)) {
+            point.tag(key, value as string);
+        }
+
+        for (const [key, value] of Object.entries(TSPoint.values)) {
+            point.floatField(key, Number(value) as number);
+        }
+
+        point.timestamp(TSPoint.time);
+
+        this.writeAPI.writePoint(point);
+    }
+
+    async getLastPointTime(): Promise<Date> {
+        const query = `from(bucket: "${this.bucket}")
+           |> range(start: 0)
+           |> filter(fn: (r) => r["_measurement"] == "${this.measurement}")
+           |> group()
+           |> sort(columns: ["_stop"], desc: true)
+           |> limit(n: 1)`;
+
+        const result = await this.queryAPI.collectRows(query);
+        if (result.length === 1) {
+            // @ts-ignore
+            return new Date(result[0]["_stop"]);
+        }
+        return new Date(0);
+    }
+}
+
+export class Influx implements Service<InfluxDBConfig> {
     private client: InfluxClient.InfluxDB;
     private writeAPI;
     private queryAPI;
@@ -37,36 +78,13 @@ export class Influx<T extends Point>
         this.queryAPI = this.client.getQueryApi(config.org);
     }
 
-    async writePoint(TSPoint: TS.Point<T>) {
-        const point = new InfluxClient.Point(this.config.measurement);
-
-        for (const [key, value] of Object.entries(TSPoint.tags)) {
-            point.tag(key, value as string);
-        }
-
-        for (const [key, value] of Object.entries(TSPoint.values)) {
-            point.floatField(key, Number(value) as number);
-        }
-
-        point.timestamp(TSPoint.time);
-
-        this.writeAPI.writePoint(point);
-    }
-
-    async getLastPointTime(): Promise<Date> {
-        const query = `from(bucket: "${this.config.bucket}")
-           |> range(start: 0)
-           |> filter(fn: (r) => r["_measurement"] == "${this.config.measurement}")
-           |> group()
-           |> sort(columns: ["_stop"], desc: true)
-           |> limit(n: 1)`;
-
-        const result = await this.queryAPI.collectRows(query);
-        if (result.length === 1) {
-            // @ts-ignore
-            return new Date(result[0]["_stop"]);
-        }
-        return new Date(0);
+    measurement(measurement: string): TSInterface<TSPoint> {
+        return new Measurement(
+            this.config.bucket,
+            measurement,
+            this.writeAPI,
+            this.queryAPI,
+        );
     }
 
     async stop() {
