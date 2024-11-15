@@ -30,3 +30,29 @@ export function objSet(
 
     return obj;
 }
+
+export type MapperFunction = (key: string, value: any) => [string, any];
+
+export function deepMap(
+    obj: Record<string, any>,
+    mapper: MapperFunction,
+): Record<string, any> {
+    function recurse(currentObj: Record<string, any>): Record<string, any> {
+        return Object.entries(currentObj).reduce(
+            (acc, [key, value]) => {
+                const [newKey, newValue] = mapper(key, value);
+
+                // If the value is an object, recursively map it
+                acc[newKey] =
+                    typeof newValue === "object" && newValue !== null
+                        ? recurse(newValue)
+                        : newValue;
+
+                return acc;
+            },
+            {} as Record<string, any>,
+        );
+    }
+
+    return recurse(obj);
+}

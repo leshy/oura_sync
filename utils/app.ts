@@ -1,5 +1,5 @@
 import { join } from "https://deno.land/std/path/mod.ts";
-import { jsonConfigProvider, envConfigProvider } from "./config.ts";
+import { jsonConfigProvider, envConfigProvider, redact } from "./config.ts";
 import { deepMerge } from "https://deno.land/std/collections/mod.ts";
 
 export async function app<CONFIG>(
@@ -15,7 +15,7 @@ export async function app<CONFIG>(
         ])),
     );
 
-    console.log(config);
+    console.log(redact(config));
 
     fn(config)
         .catch((error) => {

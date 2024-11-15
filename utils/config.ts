@@ -1,4 +1,4 @@
-import { objSet } from "./utils.ts";
+import { objSet, deepMap } from "./utils.ts";
 import { deepMerge } from "https://deno.land/std/collections/mod.ts";
 import { join } from "https://deno.land/std/path/mod.ts";
 /**
@@ -75,3 +75,9 @@ export async function envConfigProvider<CONFIG>(
 
     return config as Partial<CONFIG>;
 }
+
+const redactSet = new Set(["token", "key", "secret", "password"]);
+export const redact = <CONFIG>(config: CONFIG): CONFIG =>
+    deepMap(config, (key: string, value: any) =>
+        redactSet.has(key.toLowerCase()) ? [key, "▬▬▬▬▬▬▬▬▬▬▬▬"] : [key, value],
+    );
