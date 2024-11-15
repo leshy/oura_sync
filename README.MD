@@ -7,7 +7,7 @@ docker run \
  -e OURASYNC_INFLUXDB_URL="http://influxdbhost:8086" \
  -e OURASYNC_INFLUXDB_ORG="org" \
  -e OURASYNC_INFLUXDB_BUCKET="bucket" \
- -it ourasync
+ -it lesh/ourasync
 ```
 
 # Grafana
