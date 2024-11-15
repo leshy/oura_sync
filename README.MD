@@ -9,8 +9,10 @@ docker run \
  -e OURASYNC_INFLUXDB_BUCKET="bucket" \
  -it lesh/ourasync
 ```
+# Data format
+data transforms from [Oura Api](https://cloud.ouraring.com/v2/docs) to Influxdb are defined at [ouraSync.ts](./ouraSync.ts) file, should be quite straightforward to modify.
 
 # Grafana
 ![grafana dashboard](./misc/dashboard.png)
 
-my quick dashboard .json as example available in misc/ dir
+my quick dashboard [.json export is here](./misc/grafana_dashboard.json)
