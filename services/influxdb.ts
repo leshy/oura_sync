@@ -1,5 +1,6 @@
-import { InfluxDB, Point } from "@influxdata/influxdb-client";
-import { TSStore, TSPoint } from "../utils/timeseries/index.ts";
+import { Service } from "./types.ts";
+import * as InfluxClient from "@influxdata/influxdb-client";
+import * as TS from "../utils/timeseries/index.ts";
 
 export interface InfluxDBConfig {
     url: string;
@@ -9,20 +10,50 @@ export interface InfluxDBConfig {
     measurement: string;
 }
 
-export class Influx<T extends Point> implements TSStore<T> {
-    private client: InfluxDB;
-    private writeAPI: any;
+export type Point = {
+    time: Date;
+    values: Record<string, number>;
+    tags: Record<string, string | null>;
+};
+
+export class Influx<T extends Point>
+    implements TS.Store<T>, Service<InfluxDBConfig>
+{
+    private client: InfluxClient.InfluxDB;
+    private writeAPI;
+    private queryAPI;
+
     constructor(private config: InfluxDBConfig) {
-        this.client = new InfluxDB({ url: config.url, token: config.token });
-        this.writeAPI = this.client.getWriteApi(config.org, config.bucket);
+        this.client = new InfluxClient.InfluxDB({
+            url: config.url,
+            token: config.token,
+        });
+        this.writeAPI = this.client.getWriteApi(
+            config.org,
+            config.bucket,
+            "s",
+            { maxRetries: 5 },
+        );
+        this.queryAPI = this.client.getQueryApi(config.org);
     }
 
-    async writePoint(point: TSPoint<T>) {
-        return undefined;
+    async writePoint(TSPoint: TS.Point<T>) {
+        const point = new InfluxClient.Point(this.config.measurement);
+
+        for (const [key, value] of Object.entries(TSPoint.tags)) {
+            point.tag(key, value as string);
+        }
+
+        for (const [key, value] of Object.entries(TSPoint.values)) {
+            point.floatField(key, Number(value) as number);
+        }
+
+        point.timestamp(TSPoint.time);
+
+        this.writeAPI.writePoint(point);
     }
 
-    async getLastPoint(): Promise<TSPoint<T>> {
-        const queryApi = this.client.getQueryApi(this.config.org);
+    async getLastPointTime(): Promise<Date> {
         const query = `from(bucket: "${this.config.bucket}")
            |> range(start: 0)
            |> filter(fn: (r) => r["_measurement"] == "${this.config.measurement}")
@@ -30,15 +61,18 @@ export class Influx<T extends Point> implements TSStore<T> {
            |> sort(columns: ["_stop"], desc: true)
            |> limit(n: 1)`;
 
-        const result = await queryApi.collectRows(query);
+        const result = await this.queryAPI.collectRows(query);
         if (result.length === 1) {
             // @ts-ignore
-            return [new Date(result[0]["_stop"]), result[0]];
+            return new Date(result[0]["_stop"]);
         }
-        throw new Error("No points found");
+        return new Date(0);
     }
 
-    async close() {
-        this.writeAPI.close();
+    async stop() {
+        await this.writeAPI.flush();
+        await this.writeAPI.close();
+        // sleep for 1 second
+        await new Promise((resolve) => setTimeout(resolve, 1000));
     }
 }

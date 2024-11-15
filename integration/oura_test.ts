@@ -1,6 +1,6 @@
 import { assertEquals } from "@std/assert";
-import { Oura } from "./oura.ts";
 import { getSecret } from "../utils/secrets.ts";
+import { Oura } from "./oura.ts";
 import * as df from "date-fns";
 
 Deno.test("getPersonalInfo", async function () {
@@ -15,16 +15,13 @@ Deno.test("getPersonalInfo", async function () {
     });
 });
 
-Deno.test("getHeartRate", async function () {
+Deno.test("getDailyReadiness", async function () {
     const oura = new Oura(await getSecret("oura", "token"));
-    const heartrate = await oura.heartRate(
-        df.subDays(new Date(), 3),
+
+    for await (const point of oura.getDailySleep(
+        df.subDays(new Date(), 10),
         new Date(),
-    );
-
-    console.log(heartrate);
-
-    const data = JSON.stringify(heartrate, null, 2);
-    console.log("DATA", data);
-    await Deno.writeTextFile("heartrate.json", data);
+    )) {
+        console.log(point);
+    }
 });
