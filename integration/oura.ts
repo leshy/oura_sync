@@ -1,4 +1,4 @@
-import * as df from "date-fns";
+import * as df from "npm:date-fns";
 import { join } from "https://deno.land/std@0.118.0/path/mod.ts";
 import { getSecret } from "../utils/secrets.ts";
 import * as types from "./oura/types.ts";

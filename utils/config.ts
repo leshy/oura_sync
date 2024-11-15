@@ -15,22 +15,22 @@ export async function jsonConfigProvider<CONFIG>(
         const files: string[] = [];
         for await (const dirEntry of Deno.readDir(directoryPath)) {
             if (dirEntry.isFile && dirEntry.name.endsWith(".json")) {
-                files.push(dirEntry.name);
+                files.push(join(directoryPath, dirEntry.name));
             }
         }
 
         // Sort files alphabetically
         files.sort();
 
-        console.log(files);
         // Combine JSON configurations
-        return files.reduce((fullConfig: Partial<CONFIG>, fileName: string) => {
-            const filePath = join(directoryPath, fileName);
-            const fileContent = Deno.readTextFileSync(filePath);
-            return deepMerge(fullConfig, JSON.parse(fileContent));
-        }, {}) as Partial<CONFIG>;
-
-        return combinedConfig;
+        return files.reduce(
+            (fullConfig: Partial<CONFIG>, filePath: string) =>
+                deepMerge(
+                    fullConfig,
+                    JSON.parse(Deno.readTextFileSync(filePath)),
+                ),
+            {},
+        ) as Partial<CONFIG>;
     } catch (error) {
         console.error("Error reading JSON config files:", error);
         throw error;
