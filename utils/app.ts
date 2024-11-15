@@ -19,11 +19,12 @@ export async function app<CONFIG>(
 
     fn(config)
         .catch((error) => {
-            console.error(`error in ${name}:`, error);
+            console.error(`error:`, error);
             throw error;
-            deno.exit(1);
+            Deno.exit(1);
         })
         .then(() => {
-            console.log(`${name} exited successfully`);
+            console.log(`${name} success`);
+            Deno.exit(0);
         });
 }
