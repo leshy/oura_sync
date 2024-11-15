@@ -1,4 +1,5 @@
 import { objSet } from "./utils.ts";
+import { deepMerge } from "https://deno.land/std/collections/mod.ts";
 import { join } from "https://deno.land/std/path/mod.ts";
 /**
  * Reads JSON files in a directory, loads them in alphabetical order, and overlays them into a dictionary.
@@ -21,16 +22,13 @@ export async function jsonConfigProvider<CONFIG>(
         // Sort files alphabetically
         files.sort();
 
+        console.log(files);
         // Combine JSON configurations
-        const combinedConfig: Partial<CONFIG> = {} as Partial<CONFIG>;
-        for (const file of files) {
-            console.log("loading", file);
-            const filePath = join(directoryPath, file);
-            const fileContent = await Deno.readTextFile(filePath);
-            const jsonConfig = JSON.parse(fileContent);
-
-            Object.assign(combinedConfig, jsonConfig);
-        }
+        return files.reduce((fullConfig: Partial<CONFIG>, fileName: string) => {
+            const filePath = join(directoryPath, fileName);
+            const fileContent = Deno.readTextFileSync(filePath);
+            return deepMerge(fullConfig, JSON.parse(fileContent));
+        }, {}) as Partial<CONFIG>;
 
         return combinedConfig;
     } catch (error) {
