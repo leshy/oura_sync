@@ -39,7 +39,7 @@ export class Measurement<T extends TSPoint> extends TS.Store<T> {
 
         point.timestamp(TSPoint.time);
 
-        this.writeAPI.writePoint(point);
+        return await this.writeAPI.writePoint(point);
     }
 
     async getLastPointTime(): Promise<Date> {

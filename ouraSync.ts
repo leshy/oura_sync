@@ -106,4 +106,6 @@ app("ourasync", async (config: Config) => {
             };
         },
     );
+
+    await influx.stop();
 });
