@@ -1,6 +1,8 @@
 # OURA -> INFLUXDB sync
 
 ## Quick start
+
+### Docker
 ```sh
 docker run \
  -e OURASYNC_OURA_TOKEN=$(pass oura/token) \
@@ -10,6 +12,17 @@ docker run \
  -e OURASYNC_INFLUXDB_BUCKET="bucket" \
  -it lesh/ourasync
 ```
+
+### Local
+
+install deno (https://docs.deno.com/runtime/)
+
+```sh
+git clone git@github.com:leshy/oura_sync.git
+cd oura_sync
+deno install
+deno run main.ts
+```sh
 
 ## Details
 
