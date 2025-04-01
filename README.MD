@@ -24,7 +24,7 @@ deno install
 
 export OURASYNC_OURA_TOKEN=... 
 export OURASYNC_INFLUXDB_TOKEN=...
-export OURASYNC_INFLUXDB_URL=http://influxdbhost:8086"
+export OURASYNC_INFLUXDB_URL="http://influxdbhost:8086"
 export OURASYNC_INFLUXDB_ORG="org"
 export OURASYNC_INFLUXDB_BUCKET="bucket"
 
