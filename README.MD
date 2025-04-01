@@ -21,6 +21,13 @@ install deno (https://docs.deno.com/runtime/)
 git clone git@github.com:leshy/oura_sync.git
 cd oura_sync
 deno install
+
+export OURASYNC_OURA_TOKEN=... 
+export OURASYNC_INFLUXDB_TOKEN=...
+export OURASYNC_INFLUXDB_URL=http://influxdbhost:8086"
+export OURASYNC_INFLUXDB_ORG="org"
+export OURASYNC_INFLUXDB_BUCKET="bucket"
+
 deno run main.ts
 ```
 
