@@ -22,7 +22,7 @@ git clone git@github.com:leshy/oura_sync.git
 cd oura_sync
 deno install
 deno run main.ts
-```sh
+```
 
 ## Details
 
