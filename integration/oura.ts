@@ -62,11 +62,13 @@ export class Oura {
         end_datetime?: Date,
         next_token?: string,
     ): AsyncGenerator<any> {
+        // default end_datetime to now if not provided
+        if (!end_datetime) {
+            end_datetime = new Date();
+        }
+
         // check if range is longer then 30 days
-        if (
-            end_datetime &&
-            df.differenceInDays(end_datetime, start_datetime) > 30
-        ) {
+        if (df.differenceInDays(end_datetime, start_datetime) > 30) {
             // split range into 30 day chunks
             while (df.differenceInDays(end_datetime, start_datetime) > 30) {
                 const end_datetime_chunk = df.addDays(start_datetime, 30);

@@ -55,7 +55,7 @@ app("ourasync", async (config: Config) => {
     await influx.measurement("heart").consume(
         oura.getHeartRate,
         (point: HeartRate): Influx.Point => ({
-            time: point.timestamp,
+            time: new Date(point.timestamp),
             values: {
                 value: point.bpm,
             },
